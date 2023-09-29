@@ -1,0 +1,10 @@
+MUSART_prog.c:48:14:MUSART_enInit	24	static
+MUSART_prog.c:117:14:MUSART_enBusySendByte	24	static
+MUSART_prog.c:147:14:MUSART_enBusySendString	24	static
+MUSART_prog.c:183:14:MUSART_enBusyReceiveByte	24	static
+MUSART_prog.c:219:14:MUSART_enEnableInt	24	static
+MUSART_prog.c:245:14:MUSART_enDisableInt	24	static
+MUSART_prog.c:271:14:MUSART_enIntCallBack	24	static
+MUSART_prog.c:300:6:USART1_IRQHandler	8	static
+MUSART_prog.c:360:6:USART2_IRQHandler	8	static
+MUSART_prog.c:419:6:USART3_IRQHandler	8	static

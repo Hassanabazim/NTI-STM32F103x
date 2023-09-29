@@ -1,0 +1,5 @@
+main.c:26:5:main	32	static
+main.c:127:6:start	8	static
+main.c:132:6:speedUp	8	static
+main.c:137:6:speedDown	8	static
+main.c:143:6:stop	8	static

@@ -1,0 +1,3 @@
+HLEDMRX_prog.c:20:14:HLEDMRX_enInit	8	static
+HLEDMRX_prog.c:31:14:HLEDMRX_enDisplay	24	static
+HLEDMRX_prog.c:53:13:HLEDMRX_voidSetRowValue	24	static

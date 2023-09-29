@@ -1,0 +1,2 @@
+HKEYPAD_prog.c:17:14:HKEYPAD_enInit	16	static
+HKEYPAD_prog.c:46:14:HKEYPAD_enGetPressedKey	64	static

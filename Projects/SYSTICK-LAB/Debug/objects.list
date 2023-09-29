@@ -1,0 +1,6 @@
+"HAL/HLED/HLED_prog.o"
+"MCAL/MGPIO/MGPIO_prog.o"
+"MCAL/MRCC/MRCC_prog.o"
+"MCAL/MSTICK/MSTICK_prog.o"
+"Src/main.o"
+"Startup/startup_stm32f103c8tx.o"

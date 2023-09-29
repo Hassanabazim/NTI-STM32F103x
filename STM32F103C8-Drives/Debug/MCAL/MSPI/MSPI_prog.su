@@ -1,0 +1,9 @@
+MSPI_prog.c:42:14:MSPI_enMasterInit	24	static
+MSPI_prog.c:130:14:MSPI_enSlaveInit	24	static
+MSPI_prog.c:216:14:MSPI_enMasterSend	24	static
+MSPI_prog.c:247:14:MSPI_enSlaveReceive	24	static
+MSPI_prog.c:284:14:MSPI_enEnableInt	24	static
+MSPI_prog.c:308:14:MSPI_enDisableInt	24	static
+MSPI_prog.c:331:14:MSPI_enIntCallBack	24	static
+MSPI_prog.c:372:6:SPI1_IRQHandler	8	static
+MSPI_prog.c:404:6:SPI2_IRQHandler	8	static
