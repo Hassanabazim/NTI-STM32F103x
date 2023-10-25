@@ -1,8 +1,0 @@
-MNVIC_prog.c:17:14:MNVIC_enEnableNVIC	4	static
-MNVIC_prog.c:25:14:MNVIC_enEnableInt	24	static
-MNVIC_prog.c:45:14:MNVIC_enDisableInt	24	static
-MNVIC_prog.c:65:14:MNVIC_enSetPendingFlag	24	static
-MNVIC_prog.c:85:14:MNVIC_enClrPendingFlag	24	static
-MNVIC_prog.c:104:14:MNVIC_enGetPendingFlag	24	static
-MNVIC_prog.c:124:14:MNVIC_enGetActiveFlag	24	static
-MNVIC_prog.c:144:14:MNVIC_enSetPriority	24	static

@@ -605,33 +605,33 @@ LOAD c:/st/stm32cubeide_1.6.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
  .debug_macro   0x0000000000000ecf      0x17e MCAL/MRCC/MRCC_prog.o
  .debug_macro   0x000000000000104d       0x5f Src/main.o
 
-.debug_line     0x0000000000000000     0x1478
- .debug_line    0x0000000000000000      0x176 HAL/HLED/HLED_prog.o
- .debug_line    0x0000000000000176      0x18b HAL/HPB/HPB_prog.o
- .debug_line    0x0000000000000301      0x413 MCAL/EXTINT/EXTINT_prog.o
- .debug_line    0x0000000000000714      0x5d6 MCAL/MGPIO/MGPIO_prog.o
- .debug_line    0x0000000000000cea      0x2d5 MCAL/MNVIC/MNVIC_prog.o
- .debug_line    0x0000000000000fbf      0x185 MCAL/MRCC/MRCC_prog.o
- .debug_line    0x0000000000001144      0x2b0 Src/main.o
- .debug_line    0x00000000000013f4       0x84 Startup/startup_stm32f103c8tx.o
+.debug_line     0x0000000000000000     0x15e1
+ .debug_line    0x0000000000000000      0x19c HAL/HLED/HLED_prog.o
+ .debug_line    0x000000000000019c      0x1b1 HAL/HPB/HPB_prog.o
+ .debug_line    0x000000000000034d      0x44c MCAL/EXTINT/EXTINT_prog.o
+ .debug_line    0x0000000000000799      0x5fc MCAL/MGPIO/MGPIO_prog.o
+ .debug_line    0x0000000000000d95      0x2fb MCAL/MNVIC/MNVIC_prog.o
+ .debug_line    0x0000000000001090      0x198 MCAL/MRCC/MRCC_prog.o
+ .debug_line    0x0000000000001228      0x335 Src/main.o
+ .debug_line    0x000000000000155d       0x84 Startup/startup_stm32f103c8tx.o
 
-.debug_str      0x0000000000000000     0x4634
- .debug_str     0x0000000000000000     0x2fa0 HAL/HLED/HLED_prog.o
-                                       0x301e (size before relaxing)
- .debug_str     0x0000000000002fa0      0x15b HAL/HPB/HPB_prog.o
-                                       0x3095 (size before relaxing)
- .debug_str     0x00000000000030fb      0x687 MCAL/EXTINT/EXTINT_prog.o
-                                       0x34ec (size before relaxing)
- .debug_str     0x0000000000003782      0x26f MCAL/MGPIO/MGPIO_prog.o
-                                       0x358d (size before relaxing)
- .debug_str     0x00000000000039f1      0x4ca MCAL/MNVIC/MNVIC_prog.o
-                                       0x36a5 (size before relaxing)
- .debug_str     0x0000000000003ebb      0x715 MCAL/MRCC/MRCC_prog.o
-                                       0x38dc (size before relaxing)
- .debug_str     0x00000000000045d0       0x33 Src/main.o
-                                       0x3317 (size before relaxing)
- .debug_str     0x0000000000004603       0x31 Startup/startup_stm32f103c8tx.o
-                                         0x6c (size before relaxing)
+.debug_str      0x0000000000000000     0x4647
+ .debug_str     0x0000000000000000     0x2fb3 HAL/HLED/HLED_prog.o
+                                       0x3031 (size before relaxing)
+ .debug_str     0x0000000000002fb3      0x15b HAL/HPB/HPB_prog.o
+                                       0x30a8 (size before relaxing)
+ .debug_str     0x000000000000310e      0x687 MCAL/EXTINT/EXTINT_prog.o
+                                       0x34ff (size before relaxing)
+ .debug_str     0x0000000000003795      0x26f MCAL/MGPIO/MGPIO_prog.o
+                                       0x35a0 (size before relaxing)
+ .debug_str     0x0000000000003a04      0x4ca MCAL/MNVIC/MNVIC_prog.o
+                                       0x36b8 (size before relaxing)
+ .debug_str     0x0000000000003ece      0x715 MCAL/MRCC/MRCC_prog.o
+                                       0x38ef (size before relaxing)
+ .debug_str     0x00000000000045e3       0x33 Src/main.o
+                                       0x332a (size before relaxing)
+ .debug_str     0x0000000000004616       0x31 Startup/startup_stm32f103c8tx.o
+                                         0x7f (size before relaxing)
 
 .comment        0x0000000000000000       0x53
  .comment       0x0000000000000000       0x53 HAL/HLED/HLED_prog.o

@@ -1,8 +1,0 @@
-MSTICK_prog.c:22:14:MSTK_enInit	4	static
-MSTICK_prog.c:38:14:MSTK_enDelayMS	16	static
-MSTICK_prog.c:53:14:MSTK_enSetIntervalSingle	24	static
-MSTICK_prog.c:71:14:MSTK_enSetIntervalPeriodic	24	static
-MSTICK_prog.c:89:14:MSTK_enGetElapsedTime	24	static
-MSTICK_prog.c:104:14:MSTK_enRemainingValue	24	static
-MSTICK_prog.c:119:14:STK_enStop	4	static
-MSTICK_prog.c:128:6:SysTick_Handler	8	static
