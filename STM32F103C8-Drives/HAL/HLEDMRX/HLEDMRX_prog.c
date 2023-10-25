@@ -11,19 +11,20 @@
 #include "ERROR_STATE.h"
 #include "MRCC_int.h"
 #include "MGPIO_int.h"
-#include "MSTICK_int.h"
 #include "HLEDMRX_int.h"
 #include "HLEDMRX_config.h"
 #include "HLEDMRX_priv.h"
+
+#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 
 ErrorState_t HLEDMRX_enInit(void)
 {
 	/* 1. set Row direction to Output 2MHz PushPull */
-	MGPIO_enSetPortDirection(GPIO_CRL_ID, PORTA, OUT_2MHZ_PP);
+	MGPIO_enSetPortDirection(GPIO_CRL_ID, PORTA, OUT_2MHZ_PUSH_PULL);
 
 	/* 2. set Col direction to Output 2MHz PushPull */
-	MGPIO_enSetPortDirection(GPIO_CRH_ID, PORTB, OUT_2MHZ_PP);
+	MGPIO_enSetPortDirection(GPIO_CRH_ID, PORTB, OUT_2MHZ_PUSH_PULL);
 
 	return SUCCESS;
 }
@@ -42,7 +43,7 @@ ErrorState_t HLEDMRX_enDisplay(u8 *Copy_u8Data)
 		MGPIO_enSetPinValue(PORTB, (PIN8 + pinNum), HIGH);
 
 		/* 4. delay of the opreation */
-		MSTK_enDelayMS(2500);
+		MSYSTICK_enDelayMS(2500);
 	}
 
 

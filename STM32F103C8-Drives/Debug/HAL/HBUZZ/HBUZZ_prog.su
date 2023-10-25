@@ -1,5 +1,5 @@
-HBUZZ_prog.c:16:14:HBUZZ_enInit	24	static
-HBUZZ_prog.c:30:14:HBUZZ_enSetON	24	static
-HBUZZ_prog.c:44:14:HBUZZ_enSetOFF	24	static
-HBUZZ_prog.c:58:14:HBUZZ_enSetONCE	24	static
-HBUZZ_prog.c:74:14:HBUZZ_enSetNum	24	static
+HBUZZ_prog.c:17:14:HBUZZ_enInit	24	static
+HBUZZ_prog.c:31:14:HBUZZ_enSetON	24	static
+HBUZZ_prog.c:45:14:HBUZZ_enSetOFF	24	static
+HBUZZ_prog.c:59:14:HBUZZ_enSetONCE	24	static
+HBUZZ_prog.c:75:14:HBUZZ_enSetNum	24	static

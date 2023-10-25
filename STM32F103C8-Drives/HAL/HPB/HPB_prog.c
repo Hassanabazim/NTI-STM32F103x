@@ -12,6 +12,9 @@
 #include "HPB_priv.h"
 #include "HPB_config.h"
 
+#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
+
+
 
 ErrorState_t HPB_enInit(PB_ST *ptrPB)
 {
@@ -19,7 +22,7 @@ ErrorState_t HPB_enInit(PB_ST *ptrPB)
 
 	if (ptrPB->PB_PORT >= PORTA && ptrPB->PB_PORT <= PORTC)
 	{
-		MGPIO_enSetPinDirection(ptrPB->PB_PORT, ptrPB->PB_PIN, IN_PU_PD);
+		MGPIO_enSetPinDirection(ptrPB->PB_PORT, ptrPB->PB_PIN, IN_PULL_UP_PULL_DOWN);
 
 		/* Activiate Internal PULL-UPS Resistors */
 		if(ptrPB->PB_MODE== PULL_UP)
@@ -47,7 +50,7 @@ ErrorState_t HPB_enRead(PB_ST *ptrPB, PBState_t * ptrPBState)
 	if (Local_u8pinRead == PB_PRESSED)
 	{
 		// Wait for debouncing
-		//_delay_ms(20);
+		MSYSTICK_enDelayMS(200);
 		MGPIO_enGetPinValue(ptrPB->PB_PORT, ptrPB->PB_PIN, &Local_u8pinRead);
 		if (Local_u8pinRead == PB_PRESSED)
 		{

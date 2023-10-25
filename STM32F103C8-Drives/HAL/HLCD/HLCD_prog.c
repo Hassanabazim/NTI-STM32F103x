@@ -9,31 +9,32 @@
 #include "ERROR_STATE.h"
 #include "BIT_MATH.h"
 #include "MGPIO_int.h"
-#include "MSTICK_int.h"
 #include "HLCD_int.h"
 #include "HLCD_config.h"
 #include "HLCD_priv.h"
+
+#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 ErrorState_t HLCD_enInit(void)
 {
 	ErrorState_t Local_state = SUCCESS;
 	// set direction for pins as output
-	MGPIO_enSetPinDirection( HLCD_RS_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_EN_PIN, OUT_2MHZ_PP);
+	MGPIO_enSetPinDirection( HLCD_RS_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_EN_PIN, OUT_2MHZ_PUSH_PULL);
 
-	MGPIO_enSetPinDirection( HLCD_D7_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_D6_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_D5_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_D4_PIN, OUT_2MHZ_PP);
+	MGPIO_enSetPinDirection( HLCD_D7_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_D6_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_D5_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_D4_PIN, OUT_2MHZ_PUSH_PULL);
 #if(HLCD_MODE == _8BIT_)
-	MGPIO_enSetPinDirection( HLCD_D3_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_D2_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_D1_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection( HLCD_D0_PIN, OUT_2MHZ_PP);
-	MSTK_enDelayMS(35);
+	MGPIO_enSetPinDirection( HLCD_D3_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_D2_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_D1_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection( HLCD_D0_PIN, OUT_2MHZ_PUSH_PULL);
+	MSYSTICK_enDelayMS(35);
 	HLCD_enSendCommand(HLCD_FUNCTION_SET_8BIT_2LINE);
 #elif(HLCD_MODE == _4BIT_)
-	MSTK_enDelayMS(35);
+	MSYSTICK_enDelayMS(35);
 	MGPIO_enSetPinValue(HLCD_EN_PIN, LOW);
 
 	// send 0010
@@ -43,9 +44,9 @@ ErrorState_t HLCD_enInit(void)
 	MGPIO_enSetPinValue(HLCD_D4_PIN, 0);
 
 	MGPIO_enSetPinValue(HLCD_EN_PIN, HIGH);
-	MSTK_enDelayMS(1);
+	MSYSTICK_enDelayMS(1);
 	MGPIO_enSetPinValue(HLCD_EN_PIN, LOW);
-	MSTK_enDelayMS(30);
+	MSYSTICK_enDelayMS(30);
 	HLCD_enSendCommand(HLCD_FUNCTION_SET_4BIT_2LINE);
 #endif
 
@@ -161,9 +162,9 @@ static void HLCD_voidNLatch(u8 copy_u8Byte)
 		MGPIO_enSetPinValue(Local_u8LcdPinsArr[i][0],Local_u8LcdPinsArr[i][0], GET_BIT(copy_u8Byte,i));
 	}
 	MGPIO_enSetPinValue(HLCD_EN_PIN, HIGH);
-	MSTK_enDelayMS(1);
+	MSYSTICK_enDelayMS(1);
 	MGPIO_enSetPinValue(HLCD_EN_PIN, LOW);
-	MSTK_enDelayMS(30);
+	MSYSTICK_enDelayMS(30);
 
 #elif(HLCD_MODE == _4BIT_)
 	u8 Local_u8LcdPinsArr[4][2] ={{HLCD_D4_PIN},{HLCD_D5_PIN}, {HLCD_D6_PIN}, {HLCD_D7_PIN}};
@@ -175,9 +176,9 @@ static void HLCD_voidNLatch(u8 copy_u8Byte)
 		MGPIO_enSetPinValue(Local_u8LcdPinsArr[i][0],Local_u8LcdPinsArr[i][1], GET_BIT(copy_u8Byte,(i+4)));
 	}
 	MGPIO_enSetPinValue(HLCD_EN_PIN, HIGH);
-	MSTK_enDelayMS(1);
+	MSYSTICK_enDelayMS(1);
 	MGPIO_enSetPinValue(HLCD_EN_PIN, LOW);
-	MSTK_enDelayMS(30);
+	MSYSTICK_enDelayMS(30);
 
 	/* send lower lcd pins */
 	for (u8 i = 0; i <=3 ; i++)
@@ -185,9 +186,9 @@ static void HLCD_voidNLatch(u8 copy_u8Byte)
 		MGPIO_enSetPinValue(Local_u8LcdPinsArr[i][0], Local_u8LcdPinsArr[i][0],GET_BIT(copy_u8Byte,i));
 	}
 	MGPIO_enSetPinValue(HLCD_EN_PIN, HIGH);
-	MSTK_enDelayMS(1);
+	MSYSTICK_enDelayMS(1);
 	MGPIO_enSetPinValue(HLCD_EN_PIN, LOW);
-	MSTK_enDelayMS(30);
+	MSYSTICK_enDelayMS(30);
 
 #else
 #error ("Wrong LCD mode")

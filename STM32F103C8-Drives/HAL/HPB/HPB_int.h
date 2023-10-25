@@ -23,8 +23,8 @@ typedef enum
 
 typedef struct
 {
-	PORT_t PB_PORT;
-	PIN_t  PB_PIN;
+	MGPIO_PORT_t PB_PORT;
+	MGPIO_PIN_t  PB_PIN;
 	PBMode_t PB_MODE;
 }PB_ST;
 

@@ -16,7 +16,7 @@
 
 ErrorState_t HLED_enInit(u8 copyu8_LedPort, u8 copyu8_LedPin)
 {
-	MGPIO_enSetPinDirection(copyu8_LedPort, copyu8_LedPin, OUT_2MHZ_PP);
+	MGPIO_enSetPinDirection(copyu8_LedPort, copyu8_LedPin, OUT_2MHZ_PUSH_PULL);
 
 	return SUCCESS;
 }

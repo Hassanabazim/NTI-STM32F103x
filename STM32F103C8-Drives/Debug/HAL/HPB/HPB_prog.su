@@ -1,2 +1,2 @@
-HPB_prog.c:16:14:HPB_enInit	24	static
-HPB_prog.c:40:14:HPB_enRead	24	static
+HPB_prog.c:19:14:HPB_enInit	24	static
+HPB_prog.c:43:14:HPB_enRead	24	static

@@ -12,7 +12,8 @@ RM := rm -rf
 -include Startup/subdir.mk
 -include Src/subdir.mk
 -include MCAL/MUSART/subdir.mk
--include MCAL/MSTICK/subdir.mk
+-include MCAL/MTIM1/subdir.mk
+-include MCAL/MSYSTICK/subdir.mk
 -include MCAL/MSPI/subdir.mk
 -include MCAL/MRCC/subdir.mk
 -include MCAL/MNVIC/subdir.mk

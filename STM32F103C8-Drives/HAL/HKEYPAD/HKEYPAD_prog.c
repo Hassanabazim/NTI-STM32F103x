@@ -9,25 +9,26 @@
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "MGPIO_int.h"
-#include "MSTICK_int.h"
 #include "HKEYPAD_int.h"
 #include "HKEYPAD_priv.h"
 #include "HKEYPAD_config.h"
+
+#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 ErrorState_t HKEYPAD_enInit(void)
 {
 	ErrorState_t Local_state = SUCCESS;
 
 	//intallize
-	MGPIO_enSetPinDirection(HKEYPAD_R0_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection(HKEYPAD_R1_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection(HKEYPAD_R2_PIN, OUT_2MHZ_PP);
-	MGPIO_enSetPinDirection(HKEYPAD_R3_PIN, OUT_2MHZ_PP);
+	MGPIO_enSetPinDirection(HKEYPAD_R0_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection(HKEYPAD_R1_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection(HKEYPAD_R2_PIN, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection(HKEYPAD_R3_PIN, OUT_2MHZ_PUSH_PULL);
 
-	MGPIO_enSetPinDirection(HKEYPAD_C0_PIN, IN_PU_PD);
-	MGPIO_enSetPinDirection(HKEYPAD_C1_PIN, IN_PU_PD);
-	MGPIO_enSetPinDirection(HKEYPAD_C2_PIN, IN_PU_PD);
-	MGPIO_enSetPinDirection(HKEYPAD_C3_PIN, IN_PU_PD);
+	MGPIO_enSetPinDirection(HKEYPAD_C0_PIN, IN_PULL_UP_PULL_DOWN);
+	MGPIO_enSetPinDirection(HKEYPAD_C1_PIN, IN_PULL_UP_PULL_DOWN);
+	MGPIO_enSetPinDirection(HKEYPAD_C2_PIN, IN_PULL_UP_PULL_DOWN);
+	MGPIO_enSetPinDirection(HKEYPAD_C3_PIN, IN_PULL_UP_PULL_DOWN);
 
 	MGPIO_enSetPinValue(HKEYPAD_R0_PIN, HIGH);
 	MGPIO_enSetPinValue(HKEYPAD_R1_PIN, HIGH);
@@ -64,7 +65,7 @@ ErrorState_t HKEYPAD_enGetPressedKey(u8 *ptrKey)
 			// for debouncing
 			if (Local_u8Read == HKEYPAD_KEY_PRESSED)
 			{
-				MSTK_enDelayMS(20);
+				MSYSTICK_enDelayMS(20);
 				// Read the col Pin again to check that's not noise
 				MGPIO_enGetPinValue(colArr[col_index][0], colArr[col_index][0],&Local_u8Read);
 				if (Local_u8Read == HKEYPAD_KEY_PRESSED)

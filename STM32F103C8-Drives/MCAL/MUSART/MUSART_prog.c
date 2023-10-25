@@ -1,19 +1,17 @@
-/********************************************************************************
- * @file        		:  MUSART_prog.c								 		*
- * @Author 	 			:  HASSAN ABDELAZIM ABDELSALAM							*
- * @Version 			:  1.0.0							 					*
- * @Date				:  03/08/2023											*
- ********************************************************************************
- * @attention  USART Driver Implementation for STM32F103C8
+/**********************************************************************************************************************
+ *  FILE DESCRIPTION
+ *  -------------------------------------------------------------------------------------------------------------------
+ *         @Author	:  Hassan Abdelazim Abdelsalam
+ *         @File	:  MUSART_prog.c
+ *         @Module	:  USART
  *
- * This Driver support Polling and Interrupt driven data which is you can send
- * and receive data by waiting for corresponding flag or from App Callback
- * The Driver has 7-APIS, Driver Init, Send, Receive 1 Byte or string of Bytes
- * Enable, Disable and Interrupt CallBack fun for TX,RX,Err handling
+ *  Description:  This file provide Module APIs code Implementation
  *
- *********************************************************************************
- * INCLUDES
- ********************************************************************************/
+ *********************************************************************************************************************/
+
+/**********************************************************************************************************************
+ *  INCLUDES
+ *********************************************************************************************************************/
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "REGISTERS.h"
@@ -22,31 +20,48 @@
 #include "MUSART_config.h"
 #include "MUSART_priv.h"
 
-/********************************************************************************
- * GLOBAL STATIC VARIABLES
- ********************************************************************************/
+/**********************************************************************************************************************
+ *  GLOBAL DATA
+ *********************************************************************************************************************/
+u8  Receive_Flag = 0;
+
+u8  uart_TxBufferIndex = 0;
+u8  uart_RxBufferIndex = 0;
+
+u8  uart_TxBUFFER[MUSART_TXBUFFER_SIZE] ;
+u8  uart_RxBUFFER[MUSART_RXBUFFER_SIZE] ;
+
+/**********************************************************************************************************************
+ *  LOCAL DATA
+ *********************************************************************************************************************/
 /* Initialize an array of three pointers of USART Channels to Registers */
-static volatile USART_REG_DEF_t* USART_CH[3] = {USART1, USART2, USART3};
+static volatile USART_REG_DEF_t* USART_CH[MUSART_MAX_LINES] = {USART1, USART2, USART3};
+static void(*MUSART_CALLBACK[MUSART_MAX_LINES])(void) = {0};
 
-/* Initialize an array of three callback pointer has APP fun Address */
-static MUSART_Callback_t Callback_CH[3] = {0};
+/**********************************************************************************************************************
+ *  GLOBAL FUNCTIONS
+ *********************************************************************************************************************/
 
-/********************************************************************************
- * APIs IMPLEMENTATION
- ********************************************************************************/
-
-/*
- *@brief 	MUSART Initialize all <pre> configuration of USART Frame
- *			Half Duplex or Full Duplex, Parity even or odd or Disabled
- *		 	8bit or 9bit Data Frame, 1bit or 2bit Stop bit
- *		 	Select the Required BaudRate,Enable TX,RX,USART
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
  *
- *@param 	copy_u8USARTnum
- *@retval 	ErrorState ( SUCCESS, OUT_OF_RANG_ERR)
+ * \Description     : This Services for Initialize all <pre> configuration of the Frame
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum
  *
- */
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ *******************************************************************************/
+
 ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
 {
+
+	/* @brief 	This API use to Initialize all <pre> configuration of USART Frame
+	 *			Half Duplex or Full Duplex, Parity even or odd or Disabled
+	 *		 	8bit or 9bit Data Frame, 1bit or 2bit Stop bit
+	 *		 	Select the Required BaudRate,Enable TX,RX,USART */
+
 	ErrorState_t local_state = SUCCESS;
 	if (copy_u8USARTnum <= MUSART3)
 	{
@@ -82,6 +97,7 @@ ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
 #else
 #error("INVALID USART1 PARITY MODE");
 #endif
+
 		/* 4. Select 1BIT OR 2BIT STOP BITS */
 		USART_CH[copy_u8USARTnum]->USART_CR2 &= MUSART_STOPBITS_MASK;
 		USART_CH[copy_u8USARTnum]->USART_CR2 |= MUSART_STOPBIT_NUM << 12;
@@ -91,8 +107,10 @@ ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
 
 		/* 6. Enable The Transmission Mode */
 		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, TE);
+
 		/* 7. Enable The Receiver Mode */
 		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, RE);
+
 		/* 8. Enable The USART Peripheral */
 		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, UE);
 
@@ -106,26 +124,34 @@ ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
 	return local_state;
 }
 
-/*
- *@brief 	MUSART SendByte use the Polling Technique to transmit the data
- *			Capture the CPU of waiting Corresponding Flag
+
+/******************************************************************************
+ * \Syntax          : ErrorState_t  MUSART_enBusySendByte
+ * 									(MUSART_t copy_u8USARTnum, u8 copy_u8Data)
  *
- *@param 	copy_u8USARTnum, copy_u8Data
- *@retval 	ErrorState ( SUCCESS, OUT_OF_RANG_ERR)
+ * \Description     : This Services for transmitt byte by TX USART
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, copy_u8Data
  *
- */
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ *******************************************************************************/
 ErrorState_t MUSART_enBusySendByte(MUSART_t copy_u8USARTnum, u8 copy_u8Data)
 {
+	/*
+	 *	@brief 	This API use the Polling Technique to transmit the data
+	 *	1. waiting of TX Empty Flag to be set
+	 *	2. copy the Data into the USART Data Register
+	 *	3. Clear the TX Complete flag by writing 0 into it		*/
+
 	ErrorState_t local_state = SUCCESS;
 	if (copy_u8USARTnum <= MUSART3)
 	{
-		/* 1. waiting of TX Empty Flag to be set */
 		while (!(GET_BIT(USART_CH[copy_u8USARTnum]->USART_SR, TXE)));
-		/* 2. copy the Data into the USART Data Register */
 		USART_CH[copy_u8USARTnum]->USART_DR = copy_u8Data;
-		/* 3. waiting of TX Complete Flag to be set */
+
 		while (!(GET_BIT(USART_CH[copy_u8USARTnum]->USART_SR, TC)));
-		/* Clear the TX Complete flag by writing 0 into it */
 		CLR_BIT(USART_CH[copy_u8USARTnum]->USART_SR, TC);
 	}
 	else
@@ -136,28 +162,36 @@ ErrorState_t MUSART_enBusySendByte(MUSART_t copy_u8USARTnum, u8 copy_u8Data)
 	return local_state;
 }
 
-/*
- *@brief 	MUSART SendString use the Polling Technique to transmit the data
- *			Byte by Byte, Capture the CPU of waiting Corresponding Flag
+/******************************************************************************
+ * \Syntax          : ErrorState_t  MUSART_enBusySendString
+ * 								(MUSART_t copy_u8USARTnum, char *copy_u8Data)
  *
- *@param 	copy_u8USARTnum, *copy_u8Data
- *@retval 	ErrorState (SUCCESS, OUT_OF_RANG_ERR, NULL_PTR_ERR)
+ * \Description     : This Services for transmitt string of bytes by TX USART
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, *copy_u8Data
  *
- */
-ErrorState_t MUSART_enBusySendString(MUSART_t copy_u8USARTnum, char *copy_u8Data)
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ * 									-> NULL_PTR_ERR
+ *******************************************************************************/
+ErrorState_t MUSART_enBusySendString(MUSART_t copy_u8USARTnum, u8 *copy_u8Data)
 {
+	/*@brief 	This API use the Polling Technique to transmit the string of Byte data
+	 * 	 1. Initialize a local counter to iterate through the string
+	 * 	 2. check the end of the string if has NULL CHR or Not, if Not iterate
+	 * 	 3. Send Byte by Byte of string indexed by local Counter
+	 * 	 4. count up the local counter
+	 */
 	ErrorState_t local_state = SUCCESS;
-	/* 1. Initialize a local counter to iterate through the string */
+
 	u8 local_u8Counter = 0;
 	if (copy_u8USARTnum <= MUSART3)
 	{
 		if (copy_u8Data != NULL)
-			/* 2. check the end of the string if has NULL CHR or Not, if Not iterate */
 			while (copy_u8Data[local_u8Counter] != '\0')
 			{
-				/* 3. Send Byte by Byte of string indexed by local Counter */
 				MUSART_enBusySendByte(copy_u8USARTnum, copy_u8Data[local_u8Counter]);
-				/* 4. count up the local counter */
 				local_u8Counter++;
 			}
 		else
@@ -172,27 +206,32 @@ ErrorState_t MUSART_enBusySendString(MUSART_t copy_u8USARTnum, char *copy_u8Data
 	return local_state;
 }
 
-/*
- *@brief 	MUSART ReceiveByte use the Polling Technique to Receive the data
- *			Capture the CPU of waiting Corresponding Flag
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enBusyReceiveByte
+ * 									(MUSART_t copy_u8USARTnum, u8 *ptr_u8Data)
  *
- *@param 	copy_u8USARTnum, *copy_u8Data
- *@retval 	ErrorState (SUCCESS, OUT_OF_RANG_ERR, NULL_PTR_ERR)
+ * \Description     : This Services for Receive byte by RX USART
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, *ptr_u8Data
  *
- */
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ * 									-> NULL_PTR_ERR
+ *******************************************************************************/
 ErrorState_t MUSART_enBusyReceiveByte(MUSART_t copy_u8USARTnum, u8 *ptr_u8Data)
 {
+	/* @brief 	This API use the Polling Technique to Receive the data
+	 *	1. waiting of RX Not Empty Flag to be set
+	 *	2. get the Data from Data Register AND with 1Byte
+	 * 	3. Assign the value into the ptr_u8Data to be returned as ptr
+	 * 	4. the flag is cleared by reading the Data from the register		*/
 	ErrorState_t local_state = SUCCESS;
 	if (copy_u8USARTnum <= MUSART3)
 	{
 		if (ptr_u8Data != NULL)
 		{
-			/* 1. waiting of RX Not Empty Flag to be set */
 			while (!(GET_BIT(USART_CH[copy_u8USARTnum]->USART_SR, RXNE)));
-			/* 2. get the Data from Data Register AND with 1Byte
-			 * Assign the value into the ptr_u8Data to be returned as ptr
-			 * the flag is cleared by reading the Data from the register
-			 */
 			*ptr_u8Data = USART_CH[copy_u8USARTnum]->USART_DR & MUSART_1BYTE;
 		}
 		else
@@ -208,16 +247,26 @@ ErrorState_t MUSART_enBusyReceiveByte(MUSART_t copy_u8USARTnum, u8 *ptr_u8Data)
 	return local_state;
 }
 
-/*
- *@brief 	MUSART Enable Interrupt of the Corresponding Event
- *			Error, IDLE, RXNEmpty, TXCompelete, TXEmpty, ParityEror Interrupt
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enEnableInt
+ * 							(MUSART_t copy_u8USARTnum, MUSART_INT_t copy_u8Intnum)
  *
- *@param 	copy_u8USARTnum, copy_u8Intnum
- *@retval 	ErrorState ( SUCCESS, OUT_OF_RANG_ERR)
+ * \Description     : This Services for Enable correspoinding USART Interrupt
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, copy_u8Intnum
  *
- */
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ *******************************************************************************/
+
 ErrorState_t MUSART_enEnableInt(MUSART_t copy_u8USARTnum, MUSART_INT_t copy_u8Intnum)
 {
+	/*@brief 	This API use to Enable Interrupt of the Corresponding Event
+	 *			Error, IDLE, RXNEmpty, TXCompelete, TXEmpty, ParityEror Interrupt
+	 *
+	 *			Set the Interrupt register pin based on the event
+	 */
 	ErrorState_t local_state = SUCCESS;
 	if ((copy_u8Intnum >= IDLE_INT) && (copy_u8Intnum <= ParityEror_INT)&& copy_u8USARTnum <= MUSART3)
 	{
@@ -234,16 +283,25 @@ ErrorState_t MUSART_enEnableInt(MUSART_t copy_u8USARTnum, MUSART_INT_t copy_u8In
 	return local_state;
 }
 
-/*
- *@brief 	MUSART Disable Interrupt of the Corresponding Event
- *			Error, IDLE, RXNEmpty, TXCompelete, TXEmpty, ParityEror Interrupt
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enDisableInt
+ * 							(MUSART_t copy_u8USARTnum, MUSART_INT_t copy_u8Intnum)
  *
- *@param 	copy_u8USARTnum, copy_u8Intnum
- *@retval 	ErrorState ( SUCCESS, OUT_OF_RANG_ERR)
+ * \Description     : This Services for Disable correspoinding USART Interrupt
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, copy_u8Intnum
  *
- */
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ *******************************************************************************/
 ErrorState_t MUSART_enDisableInt(MUSART_t copy_u8USARTnum, MUSART_INT_t copy_u8Intnum)
 {
+	/*@brief 	This API use to Disable Interrupt of the Corresponding Event
+	 *			Error, IDLE, RXNEmpty, TXCompelete, TXEmpty, ParityError Interrupt
+	 *
+	 *			clear the Interrupt register pin based on the event
+	 */
 	ErrorState_t local_state = SUCCESS;
 	if ((copy_u8Intnum >= IDLE_INT) && (copy_u8Intnum <= ParityEror_INT)&& copy_u8USARTnum <= MUSART3)
 	{
@@ -260,23 +318,115 @@ ErrorState_t MUSART_enDisableInt(MUSART_t copy_u8USARTnum, MUSART_INT_t copy_u8I
 	return local_state;
 }
 
-/*
- *@brief 	MUSART Interrupt callBack of the Corresponding Event
- *			Error, IDLE, RXNEmpty, TXCompelete, TXEmpty, ParityEror Interrupt
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enSendMessage
+ * 							(MUSART_t copy_u8USARTnum, u8 *copy_u8msg)
+ * \Description     : This Services for store the Tx buffer to transmit
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, *copy_u8msg
  *
- *@param 	copy_u8USARTnum, ptr to function
- *@retval 	ErrorState ( SUCCESS, OUT_OF_RANG_ERR)
- *
- */
-ErrorState_t MUSART_enIntCallBack(MUSART_t copy_u8USARTnum, MUSART_Callback_t *copy_u8context)
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> OUT_OF_RANG_ERR
+ *******************************************************************************/
+ErrorState_t MUSART_enSendMessage(MUSART_t copy_u8USARTnum, u8 *copy_u8msg)
 {
+	/*@ brief This API use to store the TX_buffer to send by interrupt ASynchronous
+	 * 1. copy string of bytes or byte from user to Tx buffer
+	 * 2. if the buffer element was NULL break it
+	 * 3.  send the first byte
+	 * */
 	ErrorState_t local_state = SUCCESS;
-
-	if (copy_u8context != NULL)
+	if (copy_u8USARTnum <= MUSART3)
 	{
-		/* callback fun of Channel Index has a address of Application fun */
-		Callback_CH[copy_u8USARTnum].TxRx_callback = copy_u8context->TxRx_callback;
-		Callback_CH[copy_u8USARTnum].copy_u8Txdata = copy_u8context->copy_u8Txdata;
+		for (u8 i = 0; i < MUSART_TXBUFFER_SIZE; i++)
+		{
+			uart_TxBUFFER[i] = copy_u8msg[i];
+
+			if (uart_TxBUFFER[i] == MUSART_NULL_CHR)
+				break;
+		}
+		USART_CH[MUSART1]->USART_DR =  uart_TxBUFFER[uart_TxBufferIndex];
+	}
+	else
+	{
+		local_state = OUT_OF_RANG_ERR;
+	}
+
+	return local_state;
+}
+
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enReceieveMessage
+ * 							(MUSART_t copy_u8USARTnum, u8 *copy_u8msg)
+ *
+ * \Description     : This Services for store the msg from RX buffer
+ * \Sync\Async      : Synchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, copy_u8msg[]
+ *
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> NULL_PTR_ERR
+ *******************************************************************************/
+
+ErrorState_t MUSART_enReceieveMessage(MUSART_t copy_u8USARTnum, u8 *copy_u8msg)
+{
+
+	/*@ brief This API use to store the msg from RX buffer with interrupt ASynchronous
+	 * 1. copy string of bytes or byte from Rx buffer to App buffer to return it
+	 * 2. if the buffer element was ENDline char break it
+	 * 3.  exchange the EndLine char with the NUll char
+	 * 4. clear the receieve flag to receieve data again
+	 * */
+	ErrorState_t local_state = SUCCESS;
+	if (copy_u8USARTnum <= MUSART3)
+	{
+		for (u8 i = 0; i <MUSART_RXBUFFER_SIZE; i++ )
+		{
+			copy_u8msg[i] = uart_RxBUFFER[i];
+
+			if (copy_u8msg[i] == MUSART_END_LINE)
+			{
+				copy_u8msg[i] = MUSART_NULL_CHR;
+				Receive_Flag = 0;
+				break;
+			}
+		}
+	}
+	else
+	{
+		local_state = OUT_OF_RANG_ERR;
+	}
+
+	return local_state;
+}
+
+/******************************************************************************
+ * \Syntax          : ErrorState_t MUSART_enIntCallBack
+ * 							(MUSART_t copy_u8USARTnum, void (*ptr)(void))
+ *
+ * \Description     : This Services for callback APP fun based on USART Interrupt
+ * \Sync\Async      : ASynchronous
+ * \Reentrancy      : Non Reentrant
+ * \Parameters (in) : copy_u8USARTnum, ptr
+ *
+ * \Return value:   : ErrorState_t  -> SUCEESS
+ * 									-> NULL_PTR_ERR
+ *******************************************************************************/
+
+ErrorState_t MUSART_enIntCallBack(MUSART_t copy_u8USARTnum, void (*ptr)(void))
+{
+	/*
+	 *@brief 	MUSART Interrupt callBack of the Corresponding Event
+	 *			Error, IDLE, RXNEmpty, TXCompelete, TXEmpty, ParityEror Interrupt
+	 *
+	 *			Assign the callback fun with pointer to function
+	 */
+
+	ErrorState_t local_state = SUCCESS;
+	if (ptr != NULL)
+	{
+		MUSART_CALLBACK[copy_u8USARTnum] = ptr;
 	}
 	else
 	{
@@ -286,192 +436,116 @@ ErrorState_t MUSART_enIntCallBack(MUSART_t copy_u8USARTnum, MUSART_Callback_t *c
 	return local_state;
 }
 
-/********************************************************************************
- * HANDLEAR IMPLEMENTATION
- ********************************************************************************/
-/*
- *@brief 	USART1,2,3_IQHandler when any Interrupt happens,
- *		 	going to Handler Mood and Execute Application function
- *
- *@param 	void
- *@retval 	void
- *
- */
+
+
+/**********************************************************************************************************************
+ *  HANDLER REQUEST
+ *********************************************************************************************************************/
+/*	@breif 	when tranmitt the data by Interrupt,1.check if the TxEmpty is set
+ * 			2. update the tx buffer every time interrupt firing
+ * 			3, check if that byte transmitted Null charcter, then reset the index
+ * 			4. if was not send the next byte which stored in the TX buffer
+ * 			---------------------------------------------------------------------------------------------------------
+ * 			when receiving data by interrupt, 1. get the first byte from the data register
+ * 			2. check if that byte the ENDline byte, if so then reset the index and set the Rec_flag
+ * 			3. if was not update the index to receieve the next byte */
+
 void USART1_IRQHandler (void)
 {
-	if (Callback_CH[MUSART1].TxRx_callback != NULL)
+	if ((GET_BIT(USART_CH[MUSART1]->USART_SR, TXE)))
 	{
-		/* check if the IDLE Interrupt is fired */
-		if ((GET_BIT(USART_CH[MUSART1]->USART_SR,IDLE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR1,IDLE_INT)))
+		uart_TxBufferIndex++;
+		if (uart_TxBUFFER[uart_TxBufferIndex] == MUSART_NULL_CHR)
 		{
+			uart_TxBufferIndex = 0;
+		}
+		else
+		{
+			USART_CH[MUSART1]->USART_DR =  uart_TxBUFFER[uart_TxBufferIndex];
 
 		}
+	}
 
-		/* check if the TXE is fired */
-		if ((GET_BIT(USART_CH[MUSART1]->USART_SR,TXE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR1,TXEmpty_INT)))
+	if (GET_BIT(USART_CH[MUSART1]->USART_SR, RXNE))
+	{
+		uart_RxBUFFER[uart_RxBufferIndex] = USART_CH[MUSART1]->USART_DR ;
+
+		if (uart_RxBUFFER[uart_RxBufferIndex] == MUSART_END_LINE)
 		{
-			/* transmit the data */
-			USART_CH[MUSART1]->USART_DR = Callback_CH[MUSART1].copy_u8Txdata;
+			uart_RxBufferIndex = 0;
+			Receive_Flag = 1;
 		}
-
-		/* check if the TC is fired */
-		else if ((GET_BIT(USART_CH[MUSART1]->USART_SR,TC))&&(GET_BIT(USART_CH[MUSART1]->USART_CR1,TXCompelete_INT)))
+		else
 		{
-			/* Clear the TC Flag by software */
-			CLR_BIT(USART_CH[MUSART1]->USART_SR, TC);
+			uart_RxBufferIndex++;
 		}
-
-		/* check if the RXNE is fired */
-		else if ((GET_BIT(USART_CH[MUSART1]->USART_SR,RXNE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR1,RXNEmpty_INT)))
-		{
-			/* receive the data */
-			Callback_CH[MUSART1].copy_u8Rxdata = (u8*)USART_CH[MUSART1]->USART_DR ;
-		}
-
-		/* check if the parity error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART1]->USART_SR,PE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR1,ParityEror_INT)))
-		{
-
-		}
-
-		/* check if the frame error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART1]->USART_SR,FE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR3,Error_INT)))
-		{
-
-		}
-
-		/* check if the overrun error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART1]->USART_SR,ORE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR1,RXNEmpty_INT)))
-		{
-
-		}
-
-		/* check if the noise error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART1]->USART_SR,NE))&&(GET_BIT(USART_CH[MUSART1]->USART_CR3,Error_INT)))
-		{
-
-		}
-
-		/* perform Action Callback */
-		Callback_CH[MUSART1].TxRx_callback();
 	}
 }
 
 void USART2_IRQHandler (void)
 {
-	if (Callback_CH[MUSART2].TxRx_callback != NULL)
+
+	if ((GET_BIT(USART_CH[MUSART2]->USART_SR, TXE)))
 	{
-		/* check if the IDLE Interrupt is fired */
-		if ((GET_BIT(USART_CH[MUSART2]->USART_SR,IDLE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR1,IDLE_INT)))
+		uart_TxBufferIndex++;
+		if (uart_TxBUFFER[uart_TxBufferIndex] == MUSART_NULL_CHR)
 		{
+			uart_TxBufferIndex = 0;
+		}
+		else
+		{
+			USART_CH[MUSART2]->USART_DR =  uart_TxBUFFER[uart_TxBufferIndex];
 
 		}
+	}
 
-		/* check if the TXE is fired */
-		if ((GET_BIT(USART_CH[MUSART2]->USART_SR,TXE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR1,TXEmpty_INT)))
+	if (GET_BIT(USART_CH[MUSART2]->USART_SR, RXNE))
+	{
+		uart_RxBUFFER[uart_RxBufferIndex] = USART_CH[MUSART1]->USART_DR ;
+
+		if (uart_RxBUFFER[uart_RxBufferIndex] == MUSART_END_LINE)
 		{
-			/* transmit the data */
-			USART_CH[MUSART2]->USART_DR = Callback_CH[MUSART2].copy_u8Txdata;
+			uart_RxBufferIndex = 0;
+			Receive_Flag = 1;
 		}
-
-		else if ((GET_BIT(USART_CH[MUSART2]->USART_SR,TC))&&(GET_BIT(USART_CH[MUSART2]->USART_CR1,TXCompelete_INT)))
+		else
 		{
-			/* Clear the TC Flag by software */
-			CLR_BIT(USART_CH[MUSART2]->USART_SR, TC);
+			uart_RxBufferIndex++;
 		}
-
-		/* check if the RXNE is fired */
-		else if ((GET_BIT(USART_CH[MUSART2]->USART_SR,RXNE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR1,RXNEmpty_INT)))
-		{
-			/* receive the data */
-			Callback_CH[MUSART2].copy_u8Rxdata = (u8*)USART_CH[MUSART1]->USART_DR ;
-		}
-
-		/* check if the parity error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART2]->USART_SR,PE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR1,ParityEror_INT)))
-		{
-
-		}
-
-		/* check if the frame error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART2]->USART_SR,FE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR3,Error_INT)))
-		{
-
-		}
-
-		/* check if the overrun error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART2]->USART_SR,ORE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR1,RXNEmpty_INT)))
-		{
-
-		}
-
-		/* check if the noise error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART2]->USART_SR,NE))&&(GET_BIT(USART_CH[MUSART2]->USART_CR3,Error_INT)))
-		{
-
-		}
-
-		/* perform Action Callback */
-		Callback_CH[MUSART2].TxRx_callback();
 	}
 }
 
 void USART3_IRQHandler (void)
 {
-	if (Callback_CH[MUSART3].TxRx_callback != NULL)
+	if ((GET_BIT(USART_CH[MUSART3]->USART_SR, TXE)))
 	{
-		/* check if the IDLE Interrupt is fired */
-		if ((GET_BIT(USART_CH[MUSART3]->USART_SR,IDLE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR1,IDLE_INT)))
+		uart_TxBufferIndex++;
+		if (uart_TxBUFFER[uart_TxBufferIndex] == MUSART_NULL_CHR)
 		{
-
+			uart_TxBufferIndex = 0;
 		}
-
-		/* check if the TXE is fired */
-		if ((GET_BIT(USART_CH[MUSART3]->USART_SR,TXE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR1,TXEmpty_INT)))
+		else
 		{
-			/* transmit the data */
-			USART_CH[MUSART3]->USART_DR = Callback_CH[MUSART3].copy_u8Txdata;
+			USART_CH[MUSART3]->USART_DR =  uart_TxBUFFER[uart_TxBufferIndex];
 		}
+	}
 
-		else if ((GET_BIT(USART_CH[MUSART3]->USART_SR,TC))&&(GET_BIT(USART_CH[MUSART3]->USART_CR1,TXCompelete_INT)))
+	if (GET_BIT(USART_CH[MUSART3]->USART_SR, RXNE))
+	{
+		uart_RxBUFFER[uart_RxBufferIndex] = USART_CH[MUSART3]->USART_DR ;
+
+		if (uart_RxBUFFER[uart_RxBufferIndex] == MUSART_END_LINE)
 		{
-			/* Clear the TC Flag by software */
-			CLR_BIT(USART_CH[MUSART3]->USART_SR, TC);
+			uart_RxBufferIndex = 0;
+			Receive_Flag = 1;
 		}
-
-		/* check if the RXNE is fired */
-		else if ((GET_BIT(USART_CH[MUSART3]->USART_SR,RXNE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR1,RXNEmpty_INT)))
+		else
 		{
-			/* receive the data */
-			Callback_CH[MUSART3].copy_u8Rxdata = (u8*)USART_CH[MUSART1]->USART_DR ;
+			uart_RxBufferIndex++;
 		}
-
-		/* check if the parity error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART3]->USART_SR,PE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR1,ParityEror_INT)))
-		{
-
-		}
-
-		/* check if the frame error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART3]->USART_SR,FE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR3,Error_INT)))
-		{
-
-
-		}
-
-		/* check if the overrun error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART3]->USART_SR,ORE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR1,RXNEmpty_INT)))
-		{
-
-		}
-
-		/* check if the noise error Interrupt is fired */
-		else if ((GET_BIT(USART_CH[MUSART3]->USART_SR,NE))&&(GET_BIT(USART_CH[MUSART3]->USART_CR3,Error_INT)))
-		{
-
-		}
-
-		/* perform Action Callback */
-		Callback_CH[MUSART3].TxRx_callback();
 	}
 }
+/**********************************************************************************************************************
+ *  END OF FILE:  MUSART_prog.c
+ *********************************************************************************************************************/
+
