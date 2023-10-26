@@ -1,2 +1,4 @@
 APP_prog.c:41:6:App	4	static
-APP_prog.c:76:6:App_voidstartApp	16	static
+APP_prog.c:48:6:Action1	8	static
+APP_prog.c:55:6:Action2	8	static
+APP_prog.c:76:6:App_voidstartApp	8	static

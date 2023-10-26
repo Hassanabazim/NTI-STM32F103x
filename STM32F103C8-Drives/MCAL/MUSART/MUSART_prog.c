@@ -54,7 +54,7 @@ static void(*MUSART_CALLBACK[MUSART_MAX_LINES])(void) = {0};
  * 									-> OUT_OF_RANG_ERR
  *******************************************************************************/
 
-ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
+ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum, MUSART_INIT_t *ptr_u8cfg)
 {
 
 	/* @brief 	This API use to Initialize all <pre> configuration of USART Frame
@@ -65,57 +65,97 @@ ErrorState_t MUSART_enInit(MUSART_t copy_u8USARTnum)
 	ErrorState_t local_state = SUCCESS;
 	if (copy_u8USARTnum <= MUSART3)
 	{
-		/* 1. Select USART FULL OR HALF DUPLEX */
-#if (MUSART_WIRE_MODE == USART_HALF_DUPLEX)
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR3, HDSE);
-#elif (MUSART_WIRE_MODE == MUSART_FULL_DUPLEX)
-		CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR3, HDSE);
-#else
-#error("INVALID USART1 WIRE MODE");
-#endif
+		if (ptr_u8cfg != NULL)
+		{
+			/* 1. Select USART FULL OR HALF DUPLEX */
+			switch (ptr_u8cfg ->MUSART_WIRE_MODE)
+			{
+			case MUSART_HALF_DUPLEX:
+				SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR3, HDSE);
+				break;
 
-		/*2. Select 8BIT OR 9BIT DATA FRAME */
-#if (MUSART_DATA_SIZE == MUSART_8BIT_DATA)
-		CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, M);
-#elif(MUSART_DATA_SIZE == MUSART_9BIT_DATA)
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, M);
-#else
-#error("INVALID USART1 DATA SIZE");
-#endif
+			case MUSART_FULL_DUPLEX:
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR3, HDSE);
+				break;
 
-		/* 3.Select ODD OR EVEN OR DISABLED PARITY*/
-#if (MUSART_PARITY_MODE == MUSART_PARITY_EVEN)
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PCE);
-		CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PS);
+			default:
+				local_state = OUT_OF_RANG_ERR;
+			}
 
-#elif(MUSART_PARITY_MODE == MUSART_PARITY_ODD)
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PCE);
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PS);
 
-#elif (MUSART_PARITY_MODE == MUSART_PARITY_DISABLE)
-		CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PCE);
-#else
-#error("INVALID USART1 PARITY MODE");
-#endif
+			/* 2. Select USART 8Bit or 9bit Data Size */
+			switch (ptr_u8cfg ->MUSART_DATA_SIZE)
+			{
+			case MUSART_8BIT_DATA:
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, M);
+				break;
 
-		/* 4. Select 1BIT OR 2BIT STOP BITS */
-		USART_CH[copy_u8USARTnum]->USART_CR2 &= MUSART_STOPBITS_MASK;
-		USART_CH[copy_u8USARTnum]->USART_CR2 |= MUSART_STOPBIT_NUM << 12;
+			case MUSART_9BIT_DATA:
+				SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, M);
+				break;
 
-		/* 5. Select The Requirement Baud Rate */
-		USART_CH[copy_u8USARTnum]->USART_BRR = 0x341;
+			default:
+				local_state = OUT_OF_RANG_ERR;
+			}
 
-		/* 6. Enable The Transmission Mode */
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, TE);
 
-		/* 7. Enable The Receiver Mode */
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, RE);
+			/* 	3.Select ODD OR EVEN OR DISABLED PARITY	*/
+			switch (ptr_u8cfg ->MUSART_PARITY_MODE)
+			{
+			case MUSART_PARITY_EVEN:
+				SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PCE);
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PS);
+				break;
 
-		/* 8. Enable The USART Peripheral */
-		SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, UE);
+			case MUSART_PARITY_ODD:
+				SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PCE);
+				SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PS);
+				break;
 
-		/* 9. Clear the USART Flags Register */
-		USART_CH[copy_u8USARTnum]->USART_SR = 0;
+			case MUSART_PARITY_DISABLE:
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, PCE);
+				break;
+			default:
+				local_state = OUT_OF_RANG_ERR;
+			}
+
+
+			/* 4. Select 1BIT OR 2BIT STOP BITS */
+			switch (ptr_u8cfg ->MUSART_STOP_MODE)
+			{
+			case MUSART_STOPBIT1:
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR2, STOP1);
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR2, STOP2);
+				break;
+
+			case MUSART_STOPBIT2:
+				CLR_BIT(USART_CH[copy_u8USARTnum]->USART_CR2, STOP1);
+				SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR2, STOP2);
+				break;
+
+			default:
+				local_state = OUT_OF_RANG_ERR;
+			}
+
+			/* 5. Select The Requirement Baud Rate */
+			USART_CH[copy_u8USARTnum]->USART_BRR = ptr_u8cfg->MUSART_BAUDRATE;
+
+			/* 6. Enable The Transmission Mode */
+			SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, TE);
+
+			/* 7. Enable The Receiver Mode */
+			SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, RE);
+
+			/* 8. Enable The USART Peripheral */
+			SET_BIT(USART_CH[copy_u8USARTnum]->USART_CR1, UE);
+
+			/* 9. Clear the USART Flags Register */
+			USART_CH[copy_u8USARTnum]->USART_SR = 0;
+		}
+		else
+		{
+			local_state = NULL_PTR_ERR;
+		}
 	}
 	else
 	{
