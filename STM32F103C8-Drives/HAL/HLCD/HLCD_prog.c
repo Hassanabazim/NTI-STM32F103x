@@ -9,11 +9,11 @@
 #include "ERROR_STATE.h"
 #include "BIT_MATH.h"
 #include "MGPIO_int.h"
+#include "MSYSTICK_int.h"
 #include "HLCD_int.h"
 #include "HLCD_config.h"
 #include "HLCD_priv.h"
 
-#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 ErrorState_t HLCD_enInit(void)
 {
@@ -34,14 +34,16 @@ ErrorState_t HLCD_enInit(void)
 	MSYSTICK_enDelayMS(35);
 	HLCD_enSendCommand(HLCD_FUNCTION_SET_8BIT_2LINE);
 #elif(HLCD_MODE == _4BIT_)
-	MSYSTICK_enDelayMS(35);
+	MSYSTICK_enDelayMS(20);
 	MGPIO_enSetPinValue(HLCD_EN_PIN, LOW);
 
-	// send 0010
-	MGPIO_enSetPinValue(HLCD_D7_PIN, 0);
-	MGPIO_enSetPinValue(HLCD_D6_PIN, 0);
-	MGPIO_enSetPinValue(HLCD_D5_PIN, 1);
-	MGPIO_enSetPinValue(HLCD_D4_PIN, 0);
+	HLCD_enSendCommand(0x30);
+	MSYSTICK_enDelayMS(5);
+	HLCD_enSendCommand(0x30);
+	MSYSTICK_enSetBusyWait(100);
+	HLCD_enSendCommand(0x30);
+	HLCD_enSendCommand(0x20);
+
 
 	MGPIO_enSetPinValue(HLCD_EN_PIN, HIGH);
 	MSYSTICK_enDelayMS(1);
@@ -50,8 +52,11 @@ ErrorState_t HLCD_enInit(void)
 	HLCD_enSendCommand(HLCD_FUNCTION_SET_4BIT_2LINE);
 #endif
 
+	//MSYSTICK_enSetBusyWait(40);
 	HLCD_enSendCommand(HLCD_DISPLAY_CURSOR_ON_BLINK_OFF);
+//	MSYSTICK_enSetBusyWait(40);
 	HLCD_enSendCommand(HLCD_CLEAR);
+	//MSYSTICK_enDelayMS(3);
 	HLCD_enSendCommand(HLCD_ENTRY_MODE_SET_FUNCTION);
 
 
@@ -121,7 +126,7 @@ ErrorState_t HLCD_enSendIntNum(s32 copy_u32Num)
 		i--;
 	}
 
-return SUCCESS;
+	return SUCCESS;
 }
 ErrorState_t HLCD_enGoToXY(u8 copy_u8X , u8 copy_u8Y)
 {

@@ -12,6 +12,7 @@
 /**********************************************************************************************************************
  *  INCLUDES
  *********************************************************************************************************************/
+#include <math.h>
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "MRCC_int.h"
@@ -20,6 +21,7 @@
 #include "MEXTI_int.h"
 #include "MAFIO_int.h"
 #include "MSYSTICK_int.h"
+#include "MTIM1_int.h"
 #include "MDMA_int.h"
 #include "MUSART_int.h"
 #include "MSPI_int.h"
@@ -33,15 +35,23 @@
 #include "APP_config.h"
 #include "APP_priv.h"
 
+typedef enum{
+	STATE1=1,
+	STATE2,
+	STATE3
+}StateMachine_t;
+
+static volatile u16 Reading_1 = 0;
+static volatile u16 Reading_2 = 0;
+
+static volatile StateMachine_t state = STATE1;
 
 
 /**********************************************************************************************************************
  *  CALLBACK FUNCTIONS
  *********************************************************************************************************************/
-void App(void)
-{
+void ICU(void);
 
-}
 /*********************************************************************************************************************/
 #if (APPLICATION == MNVIC_TEST)
 /*********************************************************************************************************************/
@@ -125,9 +135,9 @@ void App_voidstartApp(void)
 	MGPIO_enSetPortValue(GPIO_CRH_ID, PORTB, HIGH);
 
 #elif 0
-		/* testing Set Reset FN with SetPinValue */
-		MGPIO_enSetResetPin(PORTA, PIN0, GPIO_PIN_SET);
-		MGPIO_enSetResetPin(PORTA, PIN1, GPIO_PIN_RESET);
+	/* testing Set Reset FN with SetPinValue */
+	MGPIO_enSetResetPin(PORTA, PIN0, GPIO_PIN_SET);
+	MGPIO_enSetResetPin(PORTA, PIN1, GPIO_PIN_RESET);
 
 #endif
 
@@ -196,6 +206,66 @@ void App_voidstartApp(void)
 	{
 
 	}
+
+	/*****************************************************************************************************************/
+#elif(APPLICATION == MTIM1_TEST)
+	/*****************************************************************************************************************/
+	MRCC_enSysClkINIT();
+	MRCC_enEnablePeripheralCLK(MRCC_IOPA);
+	MRCC_enEnablePeripheralCLK(MRCC_AFIO);
+	MRCC_enEnablePeripheralCLK(MRCC_USART1);
+	MRCC_enEnablePeripheralCLK(MRCC_TIM1);
+
+
+	MGPIO_enSetPinDirection(PORTA, PIN0, OUT_2MHZ_PUSH_PULL);
+	MGPIO_enSetPinDirection(PORTA, PIN8, IN_FLOATING);
+
+	MGPIO_enSetPinDirection(MUSART1_TX_PIN, OUT_2MHZ_AF_PUSH_PULL);
+	MGPIO_enSetPinDirection(MUSART1_RX_PIN, IN_FLOATING);
+
+	MUSART_INIT_t uart1;
+	uart1.MUSART_BAUDRATE = MUSART_BAUDRATE_9600_CLK_8M;
+	uart1.MUSART_DATA_SIZE = MUSART_9BIT_DATA;
+	uart1.MUSART_PARITY_MODE = MUSART_PARITY_DISABLE;
+	uart1.MUSART_STOP_MODE = MUSART_STOPBIT1;
+	uart1.MUSART_WIRE_MODE = MUSART_FULL_DUPLEX;
+
+	MUSART_enInit(MUSART1, &uart1);
+	MNVIC_enEnableNVIC();
+	MTIMER1_enSetCallBack(ICU);
+	MTIMER1_enInit();
+	MTIMER1_setPrescaler(8);
+
+	while (1)
+	{
+		MTIMER1_enEnableINT();
+		MNVIC_enEnableInt(MNVIC_TIM1_CC_INT);
+		MTIMER1_enStart();
+
+		MGPIO_enSetPinValue(PORTA, PIN0, HIGH);
+		MSYSTICK_enSetBusyWait(10);
+		MGPIO_enSetPinValue(PORTA, PIN0, LOW);
+
+
+
+		while(state!= STATE3);
+
+
+		state = STATE1;
+
+
+		u32 TimeTicks = (u32)Reading_2 - (u32)Reading_1;
+
+		f32 time  = (TimeTicks * (1 / 1000000));
+		u16 ptrValue = ceil(34300 * (time/2));
+
+		MUSART_enBusySendByte(MUSART1, ptrValue +'\0');
+		MUSART_enBusySendString(MUSART1, "\r\n");
+
+
+	}
+
+
 	/*****************************************************************************************************************/
 #elif(APPLICATION == MDMA_TEST)
 	/*****************************************************************************************************************/
@@ -364,6 +434,27 @@ void App_voidstartApp(void)
 #else
 #error("Wrong Unit Testing");
 #endif
+}
+
+void ICU(void)
+{
+	if(state == STATE1)
+	{
+		//Change State
+		MTIMER1_ICU_enRead(&Reading_1);
+		MTIMER1_ICU_enSetTrigger(1);
+		state=STATE2;
+	}
+	else if(state == STATE2 ){
+
+		//Change State
+		MTIMER1_ICU_enRead(&Reading_2);
+		state=STATE3;
+		MTIMER1_enDisableINT();
+		MTIMER1_enStop();
+		MNVIC_enDisableInt(MNVIC_TIM1_CC_INT);
+	}
+
 }
 /**********************************************************************************************************************
  *  END OF FILE: APP_prog.c

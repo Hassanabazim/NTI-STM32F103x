@@ -34,6 +34,7 @@
 #define HKEYPAD_TEST	     15
 #define HLCD_TEST		     16
 #define HLEDMRX_TEST	     17
+#define MTIM1_TEST			 18
 
 #endif /* APP_PRIV_H_ */
 

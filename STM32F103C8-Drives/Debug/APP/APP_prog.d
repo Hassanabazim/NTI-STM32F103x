@@ -7,6 +7,7 @@ APP/APP_prog.o: ../APP/APP_prog.c \
  D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MEXTI/MEXTI_int.h \
  D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MAFIO/MAFIO_int.h \
  D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MSYSTICK/MSYSTICK_int.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MTIM1/MTIM1_int.h \
  D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MDMA/MDMA_int.h \
  D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MUSART/MUSART_int.h \
  D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MSPI/MSPI_int.h \
@@ -33,6 +34,8 @@ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/
 D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MAFIO/MAFIO_int.h:
 
 D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MSYSTICK/MSYSTICK_int.h:
+
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MTIM1/MTIM1_int.h:
 
 D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/STM32F103C8-Drives/MCAL/MDMA/MDMA_int.h:
 
