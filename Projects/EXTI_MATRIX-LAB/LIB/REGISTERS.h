@@ -110,6 +110,7 @@ typedef struct
 	volatile u32 AFIO_EVCR;
 	volatile u32 AFIO_MAPR;
 	volatile u32 AFIO_EXTICR[4];
+	volatile u32 RESERVED;
 	volatile u32 AFIO_MAPR2;
 
 }AFIO_REG_DEF_t;
@@ -134,16 +135,16 @@ typedef struct
 /***************************DMA REGISTERS**********************/
 #define DMA_u32BASE_ADDRESS		 0x40020000
 
-typedef struct
+/*typedef struct
 {
 	u32 DMA_ISR;
 	u32 DMA_IFCR;
 	u32 DMA_CCR1;
 	u32 STK_CALIB;
 
-}DMA_REG_DEF_t;
+}STK_REG_DEF_t;
 
-#define DMA	((DMA_REG_DEF_t*)DMA_u32BASE_ADDRESS)
+#define STK 	((STK_REG_DEF_t*)STK_u32BASE_ADDRESS)*/
 
 
 #endif /* REGISTERS_H_ */

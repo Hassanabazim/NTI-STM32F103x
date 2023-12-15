@@ -15,6 +15,7 @@ RM := rm -rf
 -include MCAL/MRCC/subdir.mk
 -include MCAL/MGPIO/subdir.mk
 -include HAL/HLEDMRX/subdir.mk
+-include HAL/HBUZZ/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -67,8 +68,8 @@ all: main-build
 main-build: MATRIX-LAB.elf secondary-outputs
 
 # Tool invocations
-MATRIX-LAB.elf: $(OBJS) $(USER_OBJS) C:\Users\Hassa\STM32CubeIDE\workspace_1.6.1\MATRIX-LAB\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "MATRIX-LAB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Hassa\STM32CubeIDE\workspace_1.6.1\MATRIX-LAB\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MATRIX-LAB.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+MATRIX-LAB.elf: $(OBJS) $(USER_OBJS) D:\NTI-Embedded\ System\ARM\ Interfacing\NTI-STM32F103x\Projects\MATRIX-LAB\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "MATRIX-LAB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\NTI-Embedded System\ARM Interfacing\NTI-STM32F103x\Projects\MATRIX-LAB\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MATRIX-LAB.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

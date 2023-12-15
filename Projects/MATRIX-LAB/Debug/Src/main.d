@@ -1,25 +1,37 @@
 Src/main.o: ../Src/main.c \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/STD_TYPES.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/BIT_MATH.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/REGISTERS.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/ERROR_STATE.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/MCAL/MRCC/MRCC_int.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/MCAL/MGPIO/MGPIO_int.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/MCAL/MSTICK/MSTICK_int.h \
- C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/HAL/HLEDMRX/HLEDMRX_int.h
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/STD_TYPES.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/BIT_MATH.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/REGISTERS.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/ERROR_STATE.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/MCAL/MRCC/MRCC_int.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/MCAL/MGPIO/MGPIO_int.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/MCAL/MSTICK/MSTICK_int.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_prog.c \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_int.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_config.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_priv.h \
+ D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HLEDMRX/HLEDMRX_int.h
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/STD_TYPES.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/STD_TYPES.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/BIT_MATH.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/BIT_MATH.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/REGISTERS.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/REGISTERS.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/LIB/ERROR_STATE.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/LIB/ERROR_STATE.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/MCAL/MRCC/MRCC_int.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/MCAL/MRCC/MRCC_int.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/MCAL/MGPIO/MGPIO_int.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/MCAL/MGPIO/MGPIO_int.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/MCAL/MSTICK/MSTICK_int.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/MCAL/MSTICK/MSTICK_int.h:
 
-C:/Users/Hassa/STM32CubeIDE/workspace_1.6.1/MATRIX-LAB/HAL/HLEDMRX/HLEDMRX_int.h:
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_prog.c:
+
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_int.h:
+
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_config.h:
+
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HBUZZ/HBUZZ_priv.h:
+
+D:/NTI-Embedded\ System/ARM\ Interfacing/NTI-STM32F103x/Projects/MATRIX-LAB/HAL/HLEDMRX/HLEDMRX_int.h:

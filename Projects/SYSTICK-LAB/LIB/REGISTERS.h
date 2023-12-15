@@ -115,7 +115,7 @@ typedef struct
 
 }AFIO_REG_DEF_t;
 
-#define AFIO 	((AFIO_REG_DEF_t*)AFIO_u32BASE_ADDRESS)
+#define AFIO 	((AFIO_REG_DEF_t*)AFIO_u32BASE_ADDRáESS)
 
 
 /***************************SYSTICK REGISTERS**********************/

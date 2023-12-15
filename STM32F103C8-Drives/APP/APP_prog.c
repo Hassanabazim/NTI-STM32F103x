@@ -12,7 +12,6 @@
 /**********************************************************************************************************************
  *  INCLUDES
  *********************************************************************************************************************/
-#include <math.h>
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "MRCC_int.h"
@@ -111,16 +110,16 @@ void App_voidstartApp(void)
 	/* testing SetPinDirection, SetPinValue,GetpinValue and LOCKpin */
 	MGPIO_enSetPinDirection(PORTA, PIN0, OUT_2MHZ_PUSH_PULL);
 	MGPIO_enSetPinDirection(PORTA, PIN1, OUT_2MHZ_PUSH_PULL);
-	MGPIO_enSetPinDirection(PORTA, PIN2, IN_ANALOG);
-	MGPIO_enSetPinDirection(PORTB, PIN8, IN_FLOATING);
-	MGPIO_enSetPinDirection(PORTB, PIN0, IN_PULL_UP_PULL_DOWN);
+//	MGPIO_enSetPinDirection(PORTA, PIN2, IN_ANALOG);
+//	MGPIO_enSetPinDirection(PORTB, PIN8, IN_FLOATING);
+//	MGPIO_enSetPinDirection(PORTB, PIN0, IN_PULL_UP_PULL_DOWN);
 
 	/* GetPinValue use debugger to see the vari or use setpin value fn */
 	MGPIO_enSetPinValue(PORTA, PIN0, HIGH);
-	MGPIO_enGetPinValue(PORTA, PIN0, &pinvalue);
-	MGPIO_enSetPinValue(PORTA, PIN0, pinvalue);
-	MGPIO_enLockPin(PORTA, PIN0);
-	MGPIO_enSetPinDirection(PORTA, PIN0, OUT_10MHZ_PUSH_PULL);
+//	MGPIO_enGetPinValue(PORTA, PIN0, &pinvalue);
+	MGPIO_enSetPinValue(PORTA, PIN1, HIGH);
+//	MGPIO_enLockPin(PORTA, PIN0);
+//	MGPIO_enSetPinDirection(PORTA, PIN0, OUT_10MHZ_PUSH_PULL);
 
 #elif 0
 	/* test SetPortDirection and SetPortValue */
@@ -257,10 +256,9 @@ void App_voidstartApp(void)
 		u32 TimeTicks = (u32)Reading_2 - (u32)Reading_1;
 
 		f32 time  = (TimeTicks * (1 / 1000000));
-		u16 ptrValue = ceil(34300 * (time/2));
+		u16 ptrValue = (34300 * (time/2));
 
 		MUSART_enBusySendByte(MUSART1, ptrValue +'\0');
-		MUSART_enBusySendString(MUSART1, "\r\n");
 
 
 	}

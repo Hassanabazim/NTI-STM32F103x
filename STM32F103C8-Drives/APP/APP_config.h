@@ -42,7 +42,7 @@
 	*HLCD_TEST
 	*HLEDMRX_TEST
  *********************************************************************************************************************/
-#define APPLICATION 			MTIM1_TEST
+#define APPLICATION 			MGPIO_TEST
 
 
 #endif /* APP_CONFIG_H_ */
