@@ -1,9 +1,0 @@
-HLCD_prog.c:18:14:HLCD_enInit	16	static
-HLCD_prog.c:67:14:HLCD_enSendData	16	static
-HLCD_prog.c:77:14:HLCD_enSendCommand	16	static
-HLCD_prog.c:86:14:HLCD_enSendString	16	static
-HLCD_prog.c:95:14:HLCD_enCLearDisplay	8	static
-HLCD_prog.c:101:14:HLCD_enSendIntNum	32	static
-HLCD_prog.c:131:14:HLCD_enGoToXY	16	static
-HLCD_prog.c:144:14:HLCD_CustomChar	24	static
-HLCD_prog.c:155:13:HLCD_voidNLatch	32	static
