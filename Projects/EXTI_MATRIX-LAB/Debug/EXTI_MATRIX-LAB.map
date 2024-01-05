@@ -682,39 +682,38 @@ LOAD c:/st/stm32cubeide_1.6.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
  .debug_macro   0x000000000000112c       0x2e MCAL/MSTICK/MSTICK_prog.o
  .debug_macro   0x000000000000115a       0x73 Src/main.o
 
-.debug_line     0x0000000000000000     0x1f3a
- .debug_line    0x0000000000000000      0x379 HAL/HLEDMRX/HLEDMRX_prog.o
- .debug_line    0x0000000000000379      0x1bf HAL/HPB/HPB_prog.o
- .debug_line    0x0000000000000538      0x290 MCAL/MAFIO/MAFIO_prog.o
- .debug_line    0x00000000000007c8      0x45d MCAL/MEXTI/MEXTI_prog.o
- .debug_line    0x0000000000000c25      0x60a MCAL/MGPIO/MGPIO_prog.o
- .debug_line    0x000000000000122f      0x309 MCAL/MNVIC/MNVIC_prog.o
- .debug_line    0x0000000000001538      0x19f MCAL/MRCC/MRCC_prog.o
- .debug_line    0x00000000000016d7      0x2c3 MCAL/MSTICK/MSTICK_prog.o
- .debug_line    0x000000000000199a      0x51c Src/main.o
- .debug_line    0x0000000000001eb6       0x84 Startup/startup_stm32f103c8tx.o
+.debug_line     0x0000000000000000     0x1ec6
+ .debug_line    0x0000000000000000      0x369 HAL/HLEDMRX/HLEDMRX_prog.o
+ .debug_line    0x0000000000000369      0x1b7 HAL/HPB/HPB_prog.o
+ .debug_line    0x0000000000000520      0x280 MCAL/MAFIO/MAFIO_prog.o
+ .debug_line    0x00000000000007a0      0x451 MCAL/MEXTI/MEXTI_prog.o
+ .debug_line    0x0000000000000bf1      0x602 MCAL/MGPIO/MGPIO_prog.o
+ .debug_line    0x00000000000011f3      0x301 MCAL/MNVIC/MNVIC_prog.o
+ .debug_line    0x00000000000014f4      0x19b MCAL/MRCC/MRCC_prog.o
+ .debug_line    0x000000000000168f      0x2bb MCAL/MSTICK/MSTICK_prog.o
+ .debug_line    0x000000000000194a      0x4f8 Src/main.o
+ .debug_line    0x0000000000001e42       0x84 Startup/startup_stm32f103c8tx.o
 
-.debug_str      0x0000000000000000     0x49fb
- .debug_str     0x0000000000000000     0x33cf HAL/HLEDMRX/HLEDMRX_prog.o
-                                       0x345a (size before relaxing)
- .debug_str     0x00000000000033cf       0xf3 HAL/HPB/HPB_prog.o
-                                       0x30af (size before relaxing)
- .debug_str     0x00000000000034c2      0x28a MCAL/MAFIO/MAFIO_prog.o
-                                       0x345f (size before relaxing)
- .debug_str     0x000000000000374c      0x1e1 MCAL/MEXTI/MEXTI_prog.o
-                                       0x3502 (size before relaxing)
- .debug_str     0x000000000000392d      0x257 MCAL/MGPIO/MGPIO_prog.o
-                                       0x35a7 (size before relaxing)
- .debug_str     0x0000000000003b84      0x4ca MCAL/MNVIC/MNVIC_prog.o
-                                       0x36bf (size before relaxing)
- .debug_str     0x000000000000404e      0x715 MCAL/MRCC/MRCC_prog.o
-                                       0x38f6 (size before relaxing)
- .debug_str     0x0000000000004763      0x1f7 MCAL/MSTICK/MSTICK_prog.o
-                                       0x3400 (size before relaxing)
- .debug_str     0x000000000000495a       0x70 Src/main.o
-                                       0x33f9 (size before relaxing)
- .debug_str     0x00000000000049ca       0x31 Startup/startup_stm32f103c8tx.o
-                                         0x86 (size before relaxing)
+.debug_str      0x0000000000000000     0x4a4c
+ .debug_str     0x0000000000000000     0x33cb HAL/HLEDMRX/HLEDMRX_prog.o
+                                       0x3456 (size before relaxing)
+ .debug_str     0x00000000000033cb       0xf3 HAL/HPB/HPB_prog.o
+                                       0x30ab (size before relaxing)
+ .debug_str     0x00000000000034be      0x28a MCAL/MAFIO/MAFIO_prog.o
+                                       0x345b (size before relaxing)
+ .debug_str     0x0000000000003748      0x1e1 MCAL/MEXTI/MEXTI_prog.o
+                                       0x34fe (size before relaxing)
+ .debug_str     0x0000000000003929      0x257 MCAL/MGPIO/MGPIO_prog.o
+                                       0x35a3 (size before relaxing)
+ .debug_str     0x0000000000003b80      0x4ca MCAL/MNVIC/MNVIC_prog.o
+                                       0x36bb (size before relaxing)
+ .debug_str     0x000000000000404a      0x715 MCAL/MRCC/MRCC_prog.o
+                                       0x38f2 (size before relaxing)
+ .debug_str     0x000000000000475f      0x1f7 MCAL/MSTICK/MSTICK_prog.o
+                                       0x33fc (size before relaxing)
+ .debug_str     0x0000000000004956       0x70 Src/main.o
+                                       0x33f5 (size before relaxing)
+ .debug_str     0x00000000000049c6       0x86 Startup/startup_stm32f103c8tx.o
 
 .comment        0x0000000000000000       0x53
  .comment       0x0000000000000000       0x53 HAL/HLEDMRX/HLEDMRX_prog.o

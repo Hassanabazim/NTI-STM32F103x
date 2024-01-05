@@ -27,5 +27,4 @@ MCAL/MRCC \
 MCAL/MSTICK \
 Src \
 Startup \
-HAL/HBUZZ \
 

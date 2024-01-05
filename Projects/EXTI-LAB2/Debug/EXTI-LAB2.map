@@ -633,36 +633,35 @@ LOAD c:/st/stm32cubeide_1.6.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
  .debug_macro   0x0000000000000f40      0x17e MCAL/MRCC/MRCC_prog.o
  .debug_macro   0x00000000000010be       0x69 Src/main.o
 
-.debug_line     0x0000000000000000     0x18f2
- .debug_line    0x0000000000000000      0x19e HAL/HLED/HLED_prog.o
- .debug_line    0x000000000000019e      0x1b3 HAL/HPB/HPB_prog.o
- .debug_line    0x0000000000000351      0x44f MCAL/EXTINT/EXTINT_prog.o
- .debug_line    0x00000000000007a0      0x277 MCAL/MAFIO/MAFIO_prog.o
- .debug_line    0x0000000000000a17      0x5fe MCAL/MGPIO/MGPIO_prog.o
- .debug_line    0x0000000000001015      0x2fd MCAL/MNVIC/MNVIC_prog.o
- .debug_line    0x0000000000001312      0x199 MCAL/MRCC/MRCC_prog.o
- .debug_line    0x00000000000014ab      0x3c3 Src/main.o
- .debug_line    0x000000000000186e       0x84 Startup/startup_stm32f103c8tx.o
+.debug_line     0x0000000000000000     0x1892
+ .debug_line    0x0000000000000000      0x196 HAL/HLED/HLED_prog.o
+ .debug_line    0x0000000000000196      0x1ab HAL/HPB/HPB_prog.o
+ .debug_line    0x0000000000000341      0x443 MCAL/EXTINT/EXTINT_prog.o
+ .debug_line    0x0000000000000784      0x267 MCAL/MAFIO/MAFIO_prog.o
+ .debug_line    0x00000000000009eb      0x5f6 MCAL/MGPIO/MGPIO_prog.o
+ .debug_line    0x0000000000000fe1      0x2f5 MCAL/MNVIC/MNVIC_prog.o
+ .debug_line    0x00000000000012d6      0x195 MCAL/MRCC/MRCC_prog.o
+ .debug_line    0x000000000000146b      0x3a3 Src/main.o
+ .debug_line    0x000000000000180e       0x84 Startup/startup_stm32f103c8tx.o
 
-.debug_str      0x0000000000000000     0x4796
- .debug_str     0x0000000000000000     0x2fb4 HAL/HLED/HLED_prog.o
-                                       0x3032 (size before relaxing)
- .debug_str     0x0000000000002fb4      0x15b HAL/HPB/HPB_prog.o
-                                       0x30a9 (size before relaxing)
- .debug_str     0x000000000000310f      0x687 MCAL/EXTINT/EXTINT_prog.o
-                                       0x3500 (size before relaxing)
- .debug_str     0x0000000000003796      0x13e MCAL/MAFIO/MAFIO_prog.o
-                                       0x345a (size before relaxing)
- .debug_str     0x00000000000038d4      0x26f MCAL/MGPIO/MGPIO_prog.o
-                                       0x35a1 (size before relaxing)
- .debug_str     0x0000000000003b43      0x4ca MCAL/MNVIC/MNVIC_prog.o
-                                       0x36b9 (size before relaxing)
- .debug_str     0x000000000000400d      0x715 MCAL/MRCC/MRCC_prog.o
-                                       0x38f0 (size before relaxing)
- .debug_str     0x0000000000004722       0x43 Src/main.o
-                                       0x339c (size before relaxing)
- .debug_str     0x0000000000004765       0x31 Startup/startup_stm32f103c8tx.o
-                                         0x80 (size before relaxing)
+.debug_str      0x0000000000000000     0x47e1
+ .debug_str     0x0000000000000000     0x2fb0 HAL/HLED/HLED_prog.o
+                                       0x302e (size before relaxing)
+ .debug_str     0x0000000000002fb0      0x15b HAL/HPB/HPB_prog.o
+                                       0x30a5 (size before relaxing)
+ .debug_str     0x000000000000310b      0x687 MCAL/EXTINT/EXTINT_prog.o
+                                       0x34fc (size before relaxing)
+ .debug_str     0x0000000000003792      0x13e MCAL/MAFIO/MAFIO_prog.o
+                                       0x3456 (size before relaxing)
+ .debug_str     0x00000000000038d0      0x26f MCAL/MGPIO/MGPIO_prog.o
+                                       0x359d (size before relaxing)
+ .debug_str     0x0000000000003b3f      0x4ca MCAL/MNVIC/MNVIC_prog.o
+                                       0x36b5 (size before relaxing)
+ .debug_str     0x0000000000004009      0x715 MCAL/MRCC/MRCC_prog.o
+                                       0x38ec (size before relaxing)
+ .debug_str     0x000000000000471e       0x43 Src/main.o
+                                       0x3398 (size before relaxing)
+ .debug_str     0x0000000000004761       0x80 Startup/startup_stm32f103c8tx.o
 
 .comment        0x0000000000000000       0x53
  .comment       0x0000000000000000       0x53 HAL/HLED/HLED_prog.o
