@@ -7,6 +7,11 @@
 *.map
 *.o
 *.su
+*.cfg
+*.project
+*.cproject
+*.launch
+*.settings
 test-result*.xml
 makefile
 

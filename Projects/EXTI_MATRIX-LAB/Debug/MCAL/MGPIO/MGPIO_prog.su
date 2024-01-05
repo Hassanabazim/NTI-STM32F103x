@@ -1,8 +1,0 @@
-MGPIO_prog.c:17:14:MGPIO_enSetPinDirection	24	static
-MGPIO_prog.c:83:14:MGPIO_enSetPinValue	24	static
-MGPIO_prog.c:141:14:MGPIO_enTogglePin	24	static
-MGPIO_prog.c:165:14:MGPIO_enGetPinValue	24	static
-MGPIO_prog.c:189:14:MGPIO_enSetPortDirection	24	static
-MGPIO_prog.c:247:14:MGPIO_enSetPortValue	24	static
-MGPIO_prog.c:336:14:MGPIO_enSetResetPin	24	static
-MGPIO_prog.c:394:14:MGPIO_enLockPin	24	static
