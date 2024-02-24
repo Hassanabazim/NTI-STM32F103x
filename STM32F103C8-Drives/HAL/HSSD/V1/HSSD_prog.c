@@ -8,11 +8,11 @@
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "MGPIO_int.h"
+#include "MSYSTICK_int.h"
 #include "HSSD_int.h"
 #include "HSSD_config.h"
 #include "HSSD_priv.h"
 
-#include "../../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 ErrorState_t HSSD_enInit(void)
 {

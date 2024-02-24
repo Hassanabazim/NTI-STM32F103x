@@ -10,7 +10,6 @@
 #define HBUZZ_HBUZZ_INT_H_
 
 
-ErrorState_t HBUZZ_enInit(u8 copy_u8port, u8 copy_u8pin);
 ErrorState_t HBUZZ_enSetON(u8 copy_u8port, u8 copy_u8pin);
 ErrorState_t HBUZZ_enSetOFF(u8 copy_u8port, u8 copy_u8pin);
 ErrorState_t HBUZZ_enSetONCE(u8 copy_u8port, u8 copy_u8pin);

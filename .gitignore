@@ -7,11 +7,13 @@
 *.map
 *.o
 *.su
-*.cfg
-*.project
-*.cproject
-*.launch
-*.settings
+*.lss
+*.mp4
+*.mkv
+*.i
+*.xml
+*.txt
+*.s
 test-result*.xml
 makefile
 

@@ -9,11 +9,11 @@
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "MGPIO_int.h"
+#include "MSYSTICK_int.h"
 #include "HKEYPAD_int.h"
 #include "HKEYPAD_priv.h"
 #include "HKEYPAD_config.h"
 
-#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 ErrorState_t HKEYPAD_enInit(void)
 {

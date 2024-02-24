@@ -89,8 +89,8 @@ void App_voidstartApp(void)
 	/*****************************************************************************************************************/
 
 	MRCC_enSysClkINIT();
-	MRCC_enEnablePeripheralCLK(MRCC_IOPA);
-	MRCC_enDisablePeripheralCLK(MRCC_IOPA);
+	MRCC_enPeripheralInit();
+	//MRCC_enDisablePeripheralCLK(MRCC_IOPA);
 
 	while (1)
 	{
@@ -100,10 +100,10 @@ void App_voidstartApp(void)
 #elif(APPLICATION == MGPIO_TEST)
 	/*****************************************************************************************************************/
 
-	MRCC_enSysClkINIT();
-	MRCC_enEnablePeripheralCLK(MRCC_IOPA);
-	MRCC_enEnablePeripheralCLK(MRCC_IOPB);
-	MRCC_enEnablePeripheralCLK(MRCC_IOPC);
+//	MRCC_enSysClkINIT();
+//	MRCC_enEnablePeripheralCLK(MRCC_IOPA);
+//	MRCC_enEnablePeripheralCLK(MRCC_IOPB);
+//	MRCC_enEnablePeripheralCLK(MRCC_IOPC);
 
 #if 1
 	u8 pinvalue ;

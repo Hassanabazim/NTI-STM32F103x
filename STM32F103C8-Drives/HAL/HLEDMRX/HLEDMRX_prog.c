@@ -11,11 +11,11 @@
 #include "ERROR_STATE.h"
 #include "MRCC_int.h"
 #include "MGPIO_int.h"
+#include "MSYSTICK_int.h"
 #include "HLEDMRX_int.h"
 #include "HLEDMRX_config.h"
 #include "HLEDMRX_priv.h"
 
-#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 
 ErrorState_t HLEDMRX_enInit(void)

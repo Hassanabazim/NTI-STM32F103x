@@ -8,11 +8,11 @@
 #include "STD_TYPES.h"
 #include "ERROR_STATE.h"
 #include "MGPIO_int.h"
+#include "MSYSTICK_int.h"
 #include "HPB_int.h"
 #include "HPB_priv.h"
 #include "HPB_config.h"
 
-#include "../../MCAL/MSYSTICK/MSYSTICK_int.h"
 
 
 
